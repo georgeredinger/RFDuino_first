@@ -1,50 +1,45 @@
 /*
-The sketch is an empty template for Bluetooth Low Energy 4.
-Simply remove what you dont need, and fill in the rest.
+BLE hello world
 */
 
 #include <RFduinoBLE.h>
 
 void setup()
 {
-  RFduinoBLE.deviceName = "PO";
-  RFduinoBLE.advertisementData = "Bam";
+  RFduinoBLE.deviceName = "T";
+  RFduinoBLE.advertisementData = "Temp";
 //  RFduinoBLE.advertisementInterval = MILLISECONDS(300);
   RFduinoBLE.txPowerLevel = -20;  // (-20dbM to +4 dBm)
 
-  // start the BLE stack
-  //RFduinoBLE.begin();
-  //delay(100);
-  Serial.begin(57600);
-//  Serial.println("Begin");
+  RFduinoBLE.begin();
+ 
+//  Serial.begin(57600);
+//  Serial.println("Begin"); // using Serial, make the BLE not work and using RFDUINOBLE makes Serial not work
 }
 
 char data[20];
-
+float temp;
 void loop()
 {
      RFduino_ULPDelay(SECONDS(1));  
+     temp = RFduino_temperature(FAHRENHEIT); // returns temperature in Celsius and stores in float temp 
 
-  // to send one char
-  // RFduinoBLE.send((char)temp);
-  sprintf(data,"%04d",millis()/1000);
-  // to send multiple chars
-   Serial.print(data);
-   //RFduinoBLE.send(data[3]);
-//   delay(1000);
+ 
+  sprintf(data,"%04.1f",temp);
+    RFduinoBLE.send(data,4);
 
 }
 
 void RFduinoBLE_onAdvertisement(bool start){
-  Serial.println("Advert");
+ // Serial.println("Advert");
 }
 
 void RFduinoBLE_onConnect(){
-  Serial.println("Connect");
+ // Serial.println("Connect");
 }
 
 void RFduinoBLE_onDisconnect(){
-    Serial.println("Disconnect");
+//    Serial.println("Disconnect");
 
 }
 
@@ -53,5 +48,5 @@ void RFduinoBLE_onRSSI(int rssi){
 }
 
 void RFduinoBLE_onReceive(char *data, int len){
-  Serial.println("onReceive");
+//  Serial.println("onReceive");
 }
