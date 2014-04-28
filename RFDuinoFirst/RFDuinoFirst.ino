@@ -12,9 +12,10 @@ void setup()
   RFduinoBLE.txPowerLevel = -20;  // (-20dbM to +4 dBm)
 
   RFduinoBLE.begin();
- 
-//  Serial.begin(57600);
-//  Serial.println("Begin"); // using Serial, make the BLE not work and using RFDUINOBLE makes Serial not work
+  while(RFduinoBLE.radioActive) ;
+  Serial.begin(9600);
+  while(RFduinoBLE.radioActive) ;
+  Serial.println("Begin"); // using Serial, make the BLE not work and using RFDUINOBLE makes Serial not work
 }
 
 char data[20];
@@ -26,8 +27,10 @@ void loop()
 
  
   sprintf(data,"%04.1f",temp);
-    RFduinoBLE.send(data,4);
-
+  RFduinoBLE.send(data,4);
+  
+  while(RFduinoBLE.radioActive)   ;
+  Serial.println(temp);
 }
 
 void RFduinoBLE_onAdvertisement(bool start){
